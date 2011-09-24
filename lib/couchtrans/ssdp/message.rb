@@ -1,23 +1,18 @@
 module Couchtrans
 
-  module Http
+  module Ssdp
 
     Eol = "\r\n"
-    StartLineRe =
-      /^([a-z]+) ([a-z0-9_.~!*'();:@&=+$,\/?#\[\]\-]+) HTTP\/([\d.]+)$/i
-    HeaderRe = /^(?<k>[a-z\-]+): (?<v>.+)$/i
+    StartLineRe = %r{^(?:(NOTIFY|M-SEARCH) \* HTTP/1.1|HTTP/1.1 200 (OK))$}i
+    HeaderRe = %r{^(?<k>[a-z\-]+): (?<v>.*)$}i
 
-    # HTTP message parser
     class Message
 
       def initialize(s); parse(s); end
 
       def reset
         @meth = nil
-        @uri = nil
-        @version = nil
         @headers = {}
-        @body = nil
       end
 
       def parse(s)
@@ -27,16 +22,14 @@ module Couchtrans
           line.chomp! Eol
           if not @meth
             if match = StartLineRe.match(line)
-              @meth, @uri, @version = match.captures
+              @meth = match[1]
             end
           elsif line.empty?
-            @body = ''
-          elsif @body
-            @body << Eol  unless body.empty?
-            @body << line
+            return
           else
             if match = HeaderRe.match(line)
               k, v = match.captures
+              k.downcase!
               if @headers.key? k
                 @headers[k] << ',' << v
               else
@@ -48,10 +41,7 @@ module Couchtrans
       end
 
       attr_reader :meth
-      attr_reader :uri
-      attr_reader :version
       attr_reader :headers
-      attr_reader :body
     end
 
   end

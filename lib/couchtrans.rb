@@ -1,2 +1,1 @@
-require 'couchtrans/ssdp'
-require 'couchtrans/http/message'
+require 'couchtrans/ssdp/message'

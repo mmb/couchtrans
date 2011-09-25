@@ -8,7 +8,9 @@ module Couchtrans
 
     class Message
 
-      def initialize(s); parse(s); end
+      def initialize(s=nil)
+        parse(s)  if s
+      end
 
       def reset
         @meth = nil
@@ -40,8 +42,15 @@ module Couchtrans
         end
       end
 
-      attr_reader :meth
-      attr_reader :headers
+      def to_s
+        lines = [@meth == 'OK' ? 'HTTP/1.1 200 OK' :
+          "#{@meth.upcase} * HTTP/1.1"]
+        lines.push(*headers.to_a.map { |k,v| "#{k.upcase}: #{v}" })
+        lines.join(Eol) << Eol * 2
+      end
+
+      attr_accessor :meth
+      attr_accessor :headers
     end
 
   end

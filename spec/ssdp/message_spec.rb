@@ -18,4 +18,11 @@ describe Couchtrans::Ssdp::Message do
     }
   end
 
+  it 'should generate a valid notify message ' do
+    m = Couchtrans::Ssdp::Message.new
+    m.meth = 'notify'
+
+    m.to_s.should == "NOTIFY * HTTP/1.1\r\n\r\n"
+  end
+
 end

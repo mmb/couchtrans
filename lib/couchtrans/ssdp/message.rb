@@ -4,7 +4,7 @@ module Couchtrans
 
     Eol = "\r\n"
     StartLineRe = %r{^(?:(NOTIFY|M-SEARCH) \* HTTP/1.1|HTTP/1.1 200 (OK))$}i
-    HeaderRe = %r{^(?<k>[a-z\-]+): (?<v>.*)$}i
+    HeaderRe = %r{^([a-z\-]+): (.*)$}i
 
     class Message
 

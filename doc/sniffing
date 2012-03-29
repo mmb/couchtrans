@@ -1,0 +1,9 @@
+Use wireshark with these filters:
+
+UPnP multicast:
+
+ip.addr == 239.255.255.250 and udp.port == 1900
+
+All traffic to Xbox if Xbox IP is 192.168.1.118:
+
+ip.addr == 192.168.1.118

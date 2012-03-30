@@ -14,6 +14,7 @@ module Couchtrans
       else
         new_log = Logger.new($stdout)
         new_log.formatter = proc do |severity, datetime, progname, msg|
+          msg = msg.to_s
           if msg.index(Eol)
             msg = "multiline message:#{Eol}#{MultilineSep}#{Eol}#{msg}#{Eol}#{MultilineSep}"
           end
